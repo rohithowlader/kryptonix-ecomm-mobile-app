@@ -1,23 +1,24 @@
+// components/ProductAppCard.js
 import React from "react";
-import { View, Text, Image, Button, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const ProductCard = ({ product }) => {
+const ProductAppCard = ({ product }) => {
   const navigation = useNavigation();
 
+  const goToDetails = () => {
+    navigation.navigate("HomeAppScreen");
+  };
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity onPress={goToDetails} style={styles.card}>
       <Image
         source={{ uri: `https://kryptonix-ecomm.onrender.com${product.image}` }}
         style={styles.image}
       />
       <Text style={styles.name}>{product.name}</Text>
       <Text style={styles.price}>₹{product.price}</Text>
-      <Button
-        title="Login to add to cart"
-        onPress={() => navigation.navigate("Login")}
-      />
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -41,8 +42,8 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 14,
-    marginBottom: 10,
+    marginTop: 4,
   },
 });
 
-export default ProductCard;
+export default ProductAppCard;

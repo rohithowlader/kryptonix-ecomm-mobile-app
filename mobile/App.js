@@ -4,8 +4,10 @@ import { AuthProvider } from "./context/AuthContext";
 import AppNavigator from "./navigation/AppNavigator";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
-
-// Configure how notifications behave in foreground
+import { Provider as PaperProvider } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+import { StripeProvider } from "@stripe/stripe-react-native";
+// Configure notifications for foreground
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -26,7 +28,7 @@ export default function App() {
       }
     });
 
-    // Listener when notification is received in foreground
+    // Listen for notifications when app is foregrounded
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         console.log("Notification received:", notification);
@@ -41,12 +43,18 @@ export default function App() {
 
   return (
     <AuthProvider>
-      <AppNavigator />
+      <PaperProvider>
+        <NavigationContainer>
+          <StripeProvider publishableKey="pk_test_51QHjAHRwFKrcZYFWWbNjoWah2HlW0yIghlzDiel5qtmn2Eudof0fzMGtOwSP1QpxDz1C2SYixo52vD6FKEBfRCAl00VHc3BUfw">
+            <AppNavigator />
+          </StripeProvider>
+        </NavigationContainer>
+      </PaperProvider>
     </AuthProvider>
   );
 }
 
-// Function to get permission and token
+// Request permissions and get push token
 async function registerForPushNotificationsAsync() {
   if (Device.isDevice) {
     const { status: existingStatus } =

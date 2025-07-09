@@ -1,42 +1,32 @@
-// screens/LoginScreen.js
+// screens/RegisterScreen.js
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput, Button, Text, Card, Title } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CommonActions } from "@react-navigation/native";
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const res = await fetch(
-        "https://kryptonix-ecomm.onrender.com/api/auth/login",
+      const response = await fetch(
+        "https://kryptonix-ecomm.onrender.com/api/auth/register",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ name, email, password }),
         }
       );
 
-      const data = await res.json();
-
-      if (res.ok) {
-        // Save token using AsyncStorage
-        await AsyncStorage.setItem("token", data.token);
-        console.log("Login Success:", data.token);
-        // Navigate to HomeAppScreen
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "App" }],
-          })
-        );
+      const data = await response.json();
+      if (response.ok) {
+        alert("Registration successful! Please login.");
+        navigation.navigate("Login");
       } else {
-        alert(data.message || "Login failed");
+        alert(data.message || "Registration failed.");
       }
     } catch (err) {
       alert("Error: " + err.message);
@@ -47,7 +37,13 @@ export default function LoginScreen() {
     <View style={styles.container}>
       <Card style={styles.card}>
         <Card.Content>
-          <Title style={styles.title}>Login</Title>
+          <Title style={styles.title}>Register</Title>
+          <TextInput
+            label="Name"
+            value={name}
+            onChangeText={setName}
+            style={styles.input}
+          />
           <TextInput
             label="Email"
             value={email}
@@ -62,11 +58,15 @@ export default function LoginScreen() {
             secureTextEntry
             style={styles.input}
           />
-          <Button mode="contained" onPress={handleLogin} style={styles.button}>
-            Login
+          <Button
+            mode="contained"
+            onPress={handleRegister}
+            style={styles.button}
+          >
+            Register
           </Button>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={styles.link}>Don't have an account? Register</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text style={styles.link}>Already have an account? Login</Text>
           </TouchableOpacity>
         </Card.Content>
       </Card>
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 20,
-    backgroundColor: "#f6f6f6",
+    backgroundColor: "#f5f5f5",
   },
   card: {
     padding: 20,
