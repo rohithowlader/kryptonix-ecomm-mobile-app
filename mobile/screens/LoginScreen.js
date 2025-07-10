@@ -29,12 +29,7 @@ export default function LoginScreen() {
         await AsyncStorage.setItem("token", data.token);
         console.log("Login Success:", data.token);
         // Navigate to HomeAppScreen
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "App" }],
-          })
-        );
+        navigation.navigate("Main");
       } else {
         alert(data.message || "Login failed");
       }

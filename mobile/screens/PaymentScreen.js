@@ -75,20 +75,7 @@ const PaymentScreen = ({ navigation }) => {
         Alert.alert("Success", "Order placed successfully");
 
         // Reset navigation to AppTabs and open HomeAppScreen tab
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [
-              {
-                name: "AppTabs", // Your tab navigator screen
-                state: {
-                  index: 0, // HomeAppScreen tab index
-                  routes: [{ name: "HomeAppScreen" }],
-                },
-              },
-            ],
-          })
-        );
+        navigation.navigate("Main");
       } else {
         Alert.alert("Error", data.message || "Order failed");
       }

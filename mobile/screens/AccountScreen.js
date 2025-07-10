@@ -16,7 +16,7 @@ const AccountScreen = () => {
       //     routes: [{ name: "Login" }],
       //   });
 
-      navigation.navigate("Auth");
+      navigation.navigate("Login");
     } catch (err) {
       Alert.alert("Error", "Failed to log out. Please try again.");
     }

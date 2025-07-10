@@ -44,11 +44,9 @@ export default function App() {
   return (
     <AuthProvider>
       <PaperProvider>
-        <NavigationContainer>
-          <StripeProvider publishableKey="pk_test_51QHjAHRwFKrcZYFWWbNjoWah2HlW0yIghlzDiel5qtmn2Eudof0fzMGtOwSP1QpxDz1C2SYixo52vD6FKEBfRCAl00VHc3BUfw">
-            <AppNavigator />
-          </StripeProvider>
-        </NavigationContainer>
+        <StripeProvider publishableKey="pk_test_51QHjAHRwFKrcZYFWWbNjoWah2HlW0yIghlzDiel5qtmn2Eudof0fzMGtOwSP1QpxDz1C2SYixo52vD6FKEBfRCAl00VHc3BUfw">
+          <AppNavigator />
+        </StripeProvider>
       </PaperProvider>
     </AuthProvider>
   );

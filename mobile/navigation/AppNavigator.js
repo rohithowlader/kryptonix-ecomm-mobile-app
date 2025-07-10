@@ -1,47 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import AuthStack from "./AuthStack";
-import AppTabs from "./AppTabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text, TouchableOpacity } from "react-native";
-import PaymentScreen from "../screens/PaymentScreen";
 import HomeAppScreen from "../screens/HomeAppScreen";
-const Stack = createNativeStackNavigator();
-
-export default function AppNavigator() {
-  const [initialRoute, setInitialRoute] = useState(null);
-
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
-      setInitialRoute(token ? "App" : "Auth");
-    };
-    checkToken();
-  }, []);
-
-  if (!initialRoute) return null; // Or show loading spinner
-
-  return (
-    <>
-      <Stack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName={initialRoute}
-      >
-        <Stack.Screen name="Auth" component={AuthStack} />
-        <Stack.Screen name="App" component={AppTabs} />
-        {/* Payment screen (no bottom bar) */}
-        <Stack.Screen
-          name="Payment"
-          component={PaymentScreen}
-          options={{ headerShown: true }} // or false, your choice
-        />
-        <Stack.Screen
-          name="HomeAppScreen"
+import CartScreen from "../screens/CartScreen";
+import OrdersScreen from "../screens/OrdersScreen";
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+import PaymentScreen from "../screens/PaymentScreen";
+import AccountScreen from "../screens/AccountScreen";
+import { useNavigation } from "@react-navigation/native";
+const StackNavigator = () => {
+  // const navigation = useNavigation();
+  const Stack = createNativeStackNavigator();
+  const Tab = createBottomTabNavigator();
+  function BottomTabs({ navigation }) {
+    return (
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Home"
           component={HomeAppScreen}
-          options={({ navigation }) => ({
-            title: "Home",
-            headerShown: true,
+          options={{
+            tabBarLabel: "Home",
+            tabBarLabelStyle: { color: "#008E97" },
             headerRight: () => (
               <TouchableOpacity onPress={() => navigation.navigate("Account")}>
                 <Text
@@ -55,9 +36,78 @@ export default function AppNavigator() {
                 </Text>
               </TouchableOpacity>
             ),
-          })}
+            // tabBarIcon: ({ focused }) =>
+            //   focused ? (
+            //     <Entypo name="home" size={24} color="#008E97" />
+            //   ) : (
+            //     <AntDesign name="home" size={24} color="black" />
+            //   ),
+          }}
+        />
+
+        <Tab.Screen
+          name="Cart"
+          component={CartScreen}
+          options={{
+            tabBarLabel: "Profile",
+            tabBarLabelStyle: { color: "#008E97" },
+            // tabBarIcon: ({ focused }) =>
+            //   focused ? (
+            //     <Ionicons name="person" size={24} color="#008E97" />
+            //   ) : (
+            //     <Ionicons name="person-outline" size={24} color="black" />
+            //   ),
+          }}
+        />
+
+        <Tab.Screen
+          name="Orders"
+          component={OrdersScreen}
+          options={{
+            tabBarLabel: "Cart",
+            tabBarLabelStyle: { color: "#008E97" },
+            headerShown: false,
+            // tabBarIcon: ({ focused }) =>
+            //   focused ? (
+            //     <AntDesign name="shoppingcart" size={24} color="#008E97" />
+            //   ) : (
+            //     <AntDesign name="shoppingcart" size={24} color="black" />
+            //   ),
+          }}
+        />
+      </Tab.Navigator>
+    );
+  }
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={BottomTabs}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Payment"
+          component={PaymentScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Account"
+          component={AccountScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
-    </>
+    </NavigationContainer>
   );
-}
+};
+export default StackNavigator;
