@@ -9,7 +9,7 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import PaymentScreen from "../screens/PaymentScreen";
 import AccountScreen from "../screens/AccountScreen";
-import { useNavigation } from "@react-navigation/native";
+import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 const StackNavigator = () => {
   // const navigation = useNavigation();
   const Stack = createNativeStackNavigator();
@@ -80,7 +80,11 @@ const StackNavigator = () => {
   }
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="AuthLoading"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="AuthLoading" component={AuthLoadingScreen} />
         <Stack.Screen
           name="Login"
           component={LoginScreen}

@@ -75,7 +75,7 @@ const PaymentScreen = ({ navigation }) => {
         Alert.alert("Success", "Order placed successfully");
 
         // Reset navigation to AppTabs and open HomeAppScreen tab
-        navigation.navigate("Main");
+        navigation.navigate("Main", { screen: "Cart" });
       } else {
         Alert.alert("Error", data.message || "Order failed");
       }

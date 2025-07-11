@@ -1,4 +1,3 @@
-// screens/HomeAppScreen.js
 import React, { useEffect, useState } from "react";
 import {
   View,
@@ -12,11 +11,25 @@ import {
   ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 const HomeAppScreen = () => {
   const [products, setProducts] = useState([]);
   const [quantities, setQuantities] = useState({});
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
+
+  const checkLogin = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      });
+    } else {
+      fetchProducts();
+    }
+  };
 
   const fetchProducts = async () => {
     try {
@@ -38,7 +51,7 @@ const HomeAppScreen = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    checkLogin();
   }, []);
 
   const handleAddToCart = async (productId) => {

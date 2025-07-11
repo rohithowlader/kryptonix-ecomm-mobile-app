@@ -1,5 +1,4 @@
-// screens/LoginScreen.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { TextInput, Button, Text, Card, Title } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
@@ -10,6 +9,21 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+  // Check if already logged in
+  useEffect(() => {
+    const checkLogin = async () => {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        // Already logged in, redirect to main app
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Main" }],
+        });
+      }
+    };
+    checkLogin();
+  }, []);
 
   const handleLogin = async () => {
     try {
@@ -25,11 +39,11 @@ export default function LoginScreen() {
       const data = await res.json();
 
       if (res.ok) {
-        // Save token using AsyncStorage
         await AsyncStorage.setItem("token", data.token);
-        console.log("Login Success:", data.token);
-        // Navigate to HomeAppScreen
-        navigation.navigate("Main");
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Main" }],
+        });
       } else {
         alert(data.message || "Login failed");
       }
